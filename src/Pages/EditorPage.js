@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams, useNavigate, Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import Logo from '../components/Logo';
-import Cilent from '../components/Cilent';
-import Editor from '../components/Editor';
-import { initSocket } from '../socket/socket';
 import ACTIONS from '../Actions';
+import { useLocation, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { Logo, Cilent, Editor } from '../components';
+import { initSocket } from '../socket/socket';
+import { useSelector, useDispatch } from 'react-redux';
+import { KEYS } from '../redux/store';
 
 function EditorPage() {
+	const { codeSlice } = KEYS;
 	const socketRef = useRef(null);
 	const location = useLocation();
 	const { roomId } = useParams();
 	const reactNavigate = useNavigate();
 
 	const [cilents, setCilents] = useState([]);
+	const code = useSelector((state) => {
+		return state[codeSlice];
+	});
 
 	const handleCopyBtn = async () => {
 		try {
@@ -31,7 +35,7 @@ function EditorPage() {
 	};
 
 	const runCode = () => {
-		alert('Hello');
+		console.log(code);
 	};
 
 	useEffect(() => {

@@ -3,6 +3,10 @@ import codeReducer from '../../src/Pages/editorPageSlice';
 
 export const store = configureStore({
 	reducer: {
-		code: codeReducer,
+		codeSlice: codeReducer,
 	},
 });
+
+export const KEYS = {
+	codeSlice: 'codeSlice',
+};

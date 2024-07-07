@@ -1,13 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
+import ACTIONS from '../Actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { update } from '../Pages/editorPageSlice';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-import ACTIONS from '../Actions';
 
 function Editor({ socketRef, roomId }) {
+	const dispatch = useDispatch();
 	const editorRef = useRef(null);
 	useEffect(() => {
 		async function initEditor() {
@@ -25,7 +28,7 @@ function Editor({ socketRef, roomId }) {
 			editorRef.current.on('change', (instance, changes) => {
 				const { origin } = changes;
 				const code = instance.getValue();
-
+				dispatch(update(code));
 				if (origin !== 'setValue') {
 					socketRef.current.emit(ACTIONS.CODE_CHANGE, {
 						roomId,
@@ -41,6 +44,7 @@ function Editor({ socketRef, roomId }) {
 		if (socketRef.current) {
 			socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
 				if (code !== null) {
+					dispatch(update(code));
 					editorRef.current.setValue(code);
 				}
 			});
