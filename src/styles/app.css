@@ -49,7 +49,6 @@ footer a {
     font-weight: bold;
 }
 
-
 .btn {
     border: none;
     padding: 10px;
@@ -93,6 +92,7 @@ footer a:hover {
 .mainWrap {
     display: grid;
     grid-template-columns: 230px 1fr;
+    /* height: 100vh; */
 }
 
 .aside {
@@ -110,17 +110,29 @@ footer a:hover {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
+    justify-content: space-between
 }
 
 .client {
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    max-height: 80px;
+    overflow: hidden ;
     display: flex;
-    align-items: center;
+    align-items:  center;
     flex-direction: column;
     font-weight: bold;
 }
 .userName {
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    max-height: 80px;
     margin-top: 10px;
+    text-overflow: ellipsis;
+    text-align: center;
 }
 
 .logo {
@@ -138,7 +150,7 @@ footer a:hover {
 }
 .CodeMirror {
     min-height: calc(100vh - 20px);
-    font-size: 20px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.65;
     padding-top: 20px;
 }

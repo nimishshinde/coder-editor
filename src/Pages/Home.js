@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generate } from "random-words";
 import toast from "react-hot-toast";
+import Logo from "../components/Logo";
 
 function Home() {
-  // States
   const [roomId, setRoomId] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  // Functions
   const generateRoomId = (event) => {
     event.preventDefault();
     const roomdId = generate({ exactly: 3, join: "-" });
@@ -18,12 +17,12 @@ function Home() {
   };
 
   const handleJoinRoom = () => {
-    if (roomId === "" || userName === "") {
+    if (roomId === "" || username === "") {
       return toast.error("Room Id and User Name is required");
     }
 
     navigate("/editor/" + roomId, {
-      state: { userName },
+      state: { username: username },
     });
   };
 
@@ -45,9 +44,7 @@ function Home() {
             width: "83%",
           }}
         >
-          <img
-            src="/buddy-high-resolution-logo-transparent.png"
-            alt="code-sync-logo"
+          <Logo
             style={{
               width: "18rem",
               marginBottom: "2rem",
@@ -68,13 +65,13 @@ function Home() {
             type="text"
             className="inputBox"
             placeholder="User Name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             onKeyUp={handleInputEnter}
           />
           <button
             className="btn joinBtn"
-            disabled={roomId !== "" && userName !== "" ? false : true}
+            disabled={roomId !== "" && username !== "" ? false : true}
             onClick={handleJoinRoom}
           >
             Join
