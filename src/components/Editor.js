@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
 import { useSelector, useDispatch } from 'react-redux';
-import { update } from '../Pages/editorPageSlice';
+import { update } from '../Pages/slices/editorPageSlice';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript';
@@ -23,6 +23,7 @@ function Editor({ socketRef, roomId }) {
 				tabSize: 2,
 				spellcheck: true,
 				autocorrect: true,
+				autofocus: true,
 			});
 
 			editorRef.current.on('change', (instance, changes) => {

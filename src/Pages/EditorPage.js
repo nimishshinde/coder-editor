@@ -6,17 +6,26 @@ import { Logo, Cilent, Editor } from '../components';
 import { initSocket } from '../socket/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { KEYS } from '../redux/store';
+import { setOpenTerminal, setExeId } from '../Pages/slices/terminalSlice';
 
 function EditorPage() {
-	const { codeSlice } = KEYS;
+	const { codeSlice, terminalSlice } = KEYS;
 	const socketRef = useRef(null);
 	const location = useLocation();
 	const { roomId } = useParams();
 	const reactNavigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const [cilents, setCilents] = useState([]);
+	const [executionId, setExecutionId] = useState(0);
+
+	const workerRef = useRef(null);
+
 	const code = useSelector((state) => {
 		return state[codeSlice];
+	});
+	const terminal = useSelector((state) => {
+		return state[terminalSlice];
 	});
 
 	const handleCopyBtn = async () => {
@@ -34,8 +43,44 @@ function EditorPage() {
 		reactNavigate('/');
 	};
 
+	const onMessageRecieved = (data) => {
+		console.log('Message recieved', data.data);
+
+		//Terminate the worker instance
+		workerRef.current.terminate();
+	};
+
+	function distoryWorkerFn() {
+		setTimeout(() => {
+			if (workerRef.current) {
+				// workerRef.current?.terminate();
+			}
+		}, 2000);
+	}
+
 	const runCode = () => {
-		console.log(code);
+		try {
+			if (!window.Worker) {
+				alert(
+					'Your browser doesnt support certain features to run code,' +
+						'Please try some other browser such as Chrome or update your browser'
+				);
+				return '';
+			}
+
+			workerRef.current = new Worker(new URL('../workers/worker.js', import.meta.url));
+			workerRef.current.postMessage(code);
+
+			workerRef.current.onmessage = onMessageRecieved;
+			workerRef.current.onerror = (error) => {
+				console.error(error, 'Error ocurred');
+			};
+
+			distoryWorkerFn();
+		} catch (error) {
+			console.error('Error occurend while running the code', error);
+			alert('Error occurend while running the code, Please reload the window and try again');
+		}
 	};
 
 	useEffect(() => {
@@ -79,6 +124,8 @@ function EditorPage() {
 
 		init();
 	}, []);
+
+	useEffect(() => {}, []);
 
 	if (!location.state?.username) {
 		return <Navigate to="/" />;

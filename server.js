@@ -10,9 +10,7 @@ const io = new Server(server);
 const userSocketMap = {};
 
 function getAllConnectedCilents(roomId) {
-	/**
-	 * Gives you list of all connected cilents in a room.
-	 * */
+	/** Gives you list of all connected cilents in a room. */
 	return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map((socketId) => {
 		return {
 			socketId,
