@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import ACTIONS from '../Actions';
 import { useLocation, useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Logo, Cilent, Editor } from '../components';
+import { Logo, Cilent, Editor, Terminal, MonacoEditor } from '../components';
 import { initSocket } from '../socket/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { KEYS } from '../redux/store';
-import { setOpenTerminal, setExeId } from '../Pages/slices/terminalSlice';
+import { setOpenTerminal, setExeId, setTerminalData } from '../Pages/slices/terminalSlice';
+import { SUCCESS, ERROR } from './constants';
 
 function EditorPage() {
 	const { codeSlice, terminalSlice } = KEYS;
@@ -17,7 +18,6 @@ function EditorPage() {
 	const dispatch = useDispatch();
 
 	const [cilents, setCilents] = useState([]);
-	const [executionId, setExecutionId] = useState(0);
 
 	const workerRef = useRef(null);
 
@@ -43,13 +43,35 @@ function EditorPage() {
 		reactNavigate('/');
 	};
 
-	const onMessageRecieved = (data) => {
-		console.log('Message recieved', data.data);
+	const insertInTerimalData = (data) => {
+		const terminalData = terminal.data;
+		const temp = [...terminalData, data];
+		dispatch(setTerminalData(temp));
+	};
 
-		//Terminate the worker instance
+	const setTerminalResultData = (type, data) => {
+		insertInTerimalData({
+			resultType: type,
+			resultData: data,
+		});
+	};
+
+	const onMessageReceived = (data) => {
+		const { error } = data.data;
+		if (error) {
+			setTerminalResultData(ERROR, error);
+		} else {
+			setTerminalResultData(SUCCESS, data.data);
+		}
+
+		dispatch(setOpenTerminal(true));
 		workerRef.current.terminate();
 	};
 
+	/**
+	 * This function is written to distory the worker if the worker takes more than 2 secs
+	 * to give back the result, assuming the worker is blocked into infinte loop
+	 */
 	function distoryWorkerFn() {
 		setTimeout(() => {
 			if (workerRef.current) {
@@ -71,10 +93,7 @@ function EditorPage() {
 			workerRef.current = new Worker(new URL('../workers/worker.js', import.meta.url));
 			workerRef.current.postMessage(code);
 
-			workerRef.current.onmessage = onMessageRecieved;
-			workerRef.current.onerror = (error) => {
-				console.error(error, 'Error ocurred');
-			};
+			workerRef.current.onmessage = onMessageReceived;
 
 			distoryWorkerFn();
 		} catch (error) {
@@ -125,7 +144,9 @@ function EditorPage() {
 		init();
 	}, []);
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		console.log('Terminal', terminal);
+	}, [terminal]);
 
 	if (!location.state?.username) {
 		return <Navigate to="/" />;
@@ -151,29 +172,31 @@ function EditorPage() {
 
 				<button
 					className="btn copyBtn"
-					onClick={handleCopyBtn}
-				>
+					onClick={handleCopyBtn}>
 					Copy Room Id
 				</button>
 				<button
 					className="btn leaveBtn"
-					onClick={runCode}
-				>
+					onClick={runCode}>
 					Run Code
 				</button>
 				<button
 					className="btn leaveBtn"
-					onClick={handleLeaveRoom}
-				>
+					onClick={handleLeaveRoom}>
 					Leave
 				</button>
 			</div>
 
 			<div className="editorWrap">
-				<Editor
+				{/* <Editor
+					socketRef={socketRef}
+					roomId={roomId}
+				/> */}
+				<MonacoEditor
 					socketRef={socketRef}
 					roomId={roomId}
 				/>
+				<Terminal />
 			</div>
 		</div>
 	);

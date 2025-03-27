@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Home, EditorPage } from './Pages';
@@ -17,8 +17,7 @@ function App() {
 								primary: '#4aed88',
 							},
 						},
-					}}
-				></Toaster>
+					}}></Toaster>
 			</div>
 			<BrowserRouter>
 				<Routes>
@@ -27,7 +26,7 @@ function App() {
 						element={<Home />}
 					/>
 					<Route
-						path="/editor/:roomId"
+						path="/editor/:editorType/:roomId"
 						element={<EditorPage />}
 					/>
 				</Routes>

@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 ignore-folder
+.idea
 .DS_Store

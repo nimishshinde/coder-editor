@@ -14,7 +14,7 @@ export const terminalSlice = createSlice({
 		setOpenTerminal: (state, action) => {
 			state.open = action.payload;
 		},
-		setData: (state, action) => {
+		setTerminalData: (state, action) => {
 			state.data = action.payload;
 		},
 		setExeId: (state, action) => {
@@ -24,6 +24,6 @@ export const terminalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setOpenTerminal, setData, setExeId } = terminalSlice.actions;
+export const { setOpenTerminal, setTerminalData, setExeId } = terminalSlice.actions;
 
 export default terminalSlice.reducer;

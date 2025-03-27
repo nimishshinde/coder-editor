@@ -1,6 +1,10 @@
 onmessage = (event) => {
-	console.log('Worker triggered recieved');
+	console.log('Worker triggered');
 	const { code } = event.data;
+	function onErrorFn(error) {
+		postMessage({ error });
+	}
+
 	try {
 		/** To display the final output  */
 		const consoleOutput = [];
@@ -23,8 +27,6 @@ onmessage = (event) => {
 		 * executedCode accepts two arguments, i.e code and console, in this case,
 		 * code - Is the piece of code to be executed.
 		 * console - Is the console object to bebug and print.
-		 * functionBody
-		 *
 		 * */
 
 		const functionBody = `
@@ -38,21 +40,22 @@ onmessage = (event) => {
 			
 		`;
 
-		function onErrorFn(error) {
-			console.log('hello');
-			onerror(error);
-		}
-
 		/** Function Defination and Instance creation  */
-		const executedCode = new Function('code', 'console', 'onError', functionBody);
+		const codeExecutionFunction = new Function('code', 'console', 'onErrorFn', functionBody);
+
+		// function codeExecutionFunction (code, console, onErrorFn){
+		// 	functionBody
+		// }
 
 		/** Fucntion calling */
-		executedCode(code, customConsole, onErrorFn);
+		codeExecutionFunction(code, customConsole, onErrorFn);
 		const output = consoleOutput.join('\n');
 
 		/** Sending result back to main thread. */
 		postMessage(output);
 	} catch (error) {
-		return '';
+		console.log('Error catched in catch block');
+		onErrorFn(error);
+		return;
 	}
 };

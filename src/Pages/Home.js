@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { generate } from 'random-words';
 import toast from 'react-hot-toast';
 import Logo from '../components/Logo';
+import { Box, Stack, Typography } from '@mui/material';
 
 function Home() {
 	const [roomId, setRoomId] = useState('');
 	const [username, setUsername] = useState('');
+	const [editorType, setEditortype] = useState('javascript');
+	const editortypes = {
+		js: 'javascript',
+		frontend: 'frontend',
+	};
 	const navigate = useNavigate();
 
 	const generateRoomId = (event) => {
@@ -21,7 +27,7 @@ function Home() {
 			return toast.error('Room Id and User Name is required');
 		}
 
-		navigate('/editor/' + roomId, {
+		navigate('/editor/' + editorType + '/' + roomId, {
 			state: { username: username },
 		});
 	};
@@ -42,8 +48,7 @@ function Home() {
 						alignItems: 'center',
 						height: '100%',
 						width: '83%',
-					}}
-				>
+					}}>
 					<Logo
 						style={{
 							width: '18rem',
@@ -51,6 +56,45 @@ function Home() {
 						}}
 					/>
 				</div>
+				<Box marginBottom={'16px'}>
+					<Stack
+						direction={'row'}
+						justifyContent={'space-evenly'}
+						alignItems={'center'}
+						spacing={2}>
+						<Box
+							className={`editorType  ${editorType === editortypes.js ? 'activeEditorType' : 'inactiveEditorType'}`}
+							onClick={() => setEditortype(editortypes.js)}>
+							<Stack
+								direction={'column'}
+								alignItems={'center'}
+								justifyContent={'center'}
+								padding={'8px'}>
+								<img
+									src="/JavaScript-logo.png"
+									alt=""
+									className="editorTypeLogo"
+								/>
+								<Typography>Javascript</Typography>
+							</Stack>
+						</Box>
+						<Box
+							className={`editorType  ${editorType === editortypes.frontend ? ' activeEditorType' : 'inactiveEditorType'}`}
+							onClick={() => setEditortype(editortypes.frontend)}>
+							<Stack
+								direction={'column'}
+								alignItems={'center'}
+								justifyContent={'center'}
+								padding={'8px'}>
+								<img
+									src="/html1.jpg"
+									className="editorTypeLogo"
+								/>
+								<Typography>Frontend</Typography>
+							</Stack>
+						</Box>
+					</Stack>
+				</Box>
 				<h4 className="mainLabel">Paste invitation Room Id</h4>
 				<div className="inputGroup">
 					<input
@@ -72,8 +116,7 @@ function Home() {
 					<button
 						className="btn joinBtn"
 						disabled={roomId !== '' && username !== '' ? false : true}
-						onClick={handleJoinRoom}
-					>
+						onClick={handleJoinRoom}>
 						Join
 					</button>
 
@@ -82,8 +125,7 @@ function Home() {
 						<a
 							href=""
 							className="createNewBtn"
-							onClick={generateRoomId}
-						>
+							onClick={generateRoomId}>
 							new room
 						</a>
 					</span>

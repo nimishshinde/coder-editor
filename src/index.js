@@ -4,11 +4,20 @@ import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 import { store } from '../src/redux/store.js';
 import { Provider } from 'react-redux';
+import { createTheme, ThemeProvider } from '@mui/material';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('app-root'));
+const theme = createTheme({
+	typography: {
+		fontFamily: 'monospace',
+	},
+});
+
 root.render(
 	<Provider store={store}>
-		<App />
+		<ThemeProvider theme={theme}>
+			<App />
+		</ThemeProvider>
 	</Provider>
 );
 

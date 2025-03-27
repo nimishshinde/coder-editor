@@ -11,4 +11,5 @@ module.exports = {
 	bracketSameLine: false, // pretty JSX
 	endOfLine: 'lf', // 'lf' for linux, 'crlf' for windows, we need to use 'lf' for git
 	singleAttributePerLine: true,
+	jsxBracketSameLine: true,
 };

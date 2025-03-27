@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { update } from '../Pages/slices/editorPageSlice';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
@@ -27,6 +27,7 @@ function Editor({ socketRef, roomId }) {
 			});
 
 			editorRef.current.on('change', (instance, changes) => {
+				//put debouncing here.
 				const { origin } = changes;
 				const code = instance.getValue();
 				dispatch(update(code));
@@ -46,7 +47,7 @@ function Editor({ socketRef, roomId }) {
 			socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
 				if (code !== null) {
 					dispatch(update(code));
-					editorRef.current.setValue(code);
+					// editorRef.current.setValue(code);
 				}
 			});
 		}
