@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { useDispatch, useSelector } from 'react-redux';
-import ACTIONS from '../Actions';
-import { update } from '../Pages/slices/editorPageSlice';
-import { KEYS } from '../redux/store';
+import ACTIONS from '../../Actions';
+import { update } from '../../Pages/slices/editorPageSlice';
+import { KEYS } from '../../redux/store';
 import { useOutletContext } from 'react-router-dom';
+import { MONACO_OPTIONS } from '../../constants/monacoOptions';
 
 function MonacoEditor() {
 	const { socketRef, roomId } = useOutletContext();
@@ -50,39 +51,7 @@ function MonacoEditor() {
 			defaultValue={code}
 			theme="vs-dark"
 			fontSize={24}
-			options={{
-				selectOnLineNumbers: true,
-				fontSize: 14,
-				fontFamily: 'jetbrains mono',
-				lineNumbers: 'on',
-				roundedSelection: true,
-				scrollBeyondLastLine: false,
-				lineHeight: 20,
-				autoClosingBrackets: 'always',
-				autoIndent: 'full',
-				snippetSuggestions: 'inline',
-				quickSuggestions: true,
-				matchBrackets: 'always',
-				padding: { top: 10, bottom: 10 },
-				automaticLayout: true,
-				autoClosingComments: 'always',
-				colorDecorators: true,
-				cursorStyle: 'underline',
-				folding: true,
-				foldingHighlight: true,
-				// fontWeight: '',
-				fontLigatures: true,
-				links: true,
-				tabFocusMode: true,
-				tabSize: 4,
-				defaultColorDecorators: true,
-				stickyScroll: {
-					enabled: true,
-					maxLineCount: 8,
-					defaultModel: 'outlineModel',
-					scrollWithEditor: true,
-				},
-			}}
+			options={MONACO_OPTIONS}
 			onChange={handleEditorChange}
 		/>
 	);

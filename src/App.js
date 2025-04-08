@@ -4,8 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { Home, EditorPage } from './Pages';
 import './styles/index.css';
 import './styles/app.css';
-import { MonacoEditor } from './components';
-import SandboxEditor from './components/SandboxEditor';
+import { MonacoEditor, SandboxEditor } from './components';
 function App() {
 	return (
 		<>
