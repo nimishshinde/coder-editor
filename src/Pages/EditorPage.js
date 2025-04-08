@@ -6,16 +6,16 @@ import { Logo, Cilent, Editor, Terminal, MonacoEditor } from '../components';
 import { initSocket } from '../socket/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { KEYS } from '../redux/store';
-import { setOpenTerminal, setTerminalData } from '../Pages/slices/terminalSlice';
+import { setOpenTerminal, setTerminalData } from '../redux/slices/terminalSlice';
 import { SUCCESS, ERROR } from './constants';
 import { Outlet } from 'react-router-dom';
-import { openCloseFile } from '../components/slices/sandboxSlice';
+import { toggleFileSystem } from '../redux/slices/fileSystemSlice';
 
 function EditorPage() {
 	const { codeSlice, terminalSlice } = KEYS;
 	const socketRef = useRef(null);
 	const location = useLocation();
-	const { roomId } = useParams();
+	const { roomId, editorType } = useParams();
 	const reactNavigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -110,11 +110,6 @@ function EditorPage() {
 		}
 	};
 
-	const handleOpenFile = () => {
-		console.log('open/close file', sandboxEditor.openFile);
-		dispatch(openCloseFile(!sandboxEditor.openFile));
-	};
-
 	useEffect(() => {
 		if (!location.state?.username) {
 			return;
@@ -150,7 +145,9 @@ function EditorPage() {
 			socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
 				alert('disconnected event triggered');
 				toast.success(`${username} left the room`);
-				setCilents((prevCilents) => prevCilents.filter((cilent) => cilent.socketId !== socketId));
+				setCilents((prevCilents) =>
+					prevCilents.filter((cilent) => cilent.socketId !== socketId)
+				);
 			});
 		};
 
@@ -158,8 +155,10 @@ function EditorPage() {
 	}, []);
 
 	useEffect(() => {
-		console.log('Terminal', terminal);
-	}, [terminal]);
+		if (editorType === 'frontend') {
+			dispatch(toggleFileSystem());
+		}
+	}, []);
 
 	if (!location.state?.username) {
 		return <Navigate to="/" />;
@@ -182,11 +181,6 @@ function EditorPage() {
 						))}
 					</div>
 				</div>
-				<button
-					className="btn copyBtn"
-					onClick={handleOpenFile}>
-					open prev file
-				</button>
 				<button
 					className="btn copyBtn"
 					onClick={handleCopyBtn}>

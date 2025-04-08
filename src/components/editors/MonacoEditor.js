@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { useDispatch, useSelector } from 'react-redux';
 import ACTIONS from '../../Actions';
-import { update } from '../../Pages/slices/editorPageSlice';
+import { update } from '../../redux/slices/editorPageSlice';
 import { KEYS } from '../../redux/store';
 import { useOutletContext } from 'react-router-dom';
 import { MONACO_OPTIONS } from '../../constants/monacoOptions';

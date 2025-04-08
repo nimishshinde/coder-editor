@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { KEYS } from '../redux/store';
 import TerminalHeader from './TerminalHeader';
-import { setOpenTerminal } from '../Pages/slices/terminalSlice';
+import { setOpenTerminal } from '../redux/slices/terminalSlice';
 import { Box, Stack } from '@mui/material';
 
 // import component 👇

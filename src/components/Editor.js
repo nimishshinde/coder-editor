@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
 import { useDispatch } from 'react-redux';
-import { update } from '../Pages/slices/editorPageSlice';
+import { update } from '../redux/slices/editorPageSlice';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript';
