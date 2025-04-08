@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Home, EditorPage } from './Pages';
+import { MonacoEditor, SandboxEditor } from './components';
 import './styles/index.css';
 import './styles/app.css';
-import { MonacoEditor, SandboxEditor } from './components';
 function App() {
 	return (
 		<>

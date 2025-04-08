@@ -10,10 +10,10 @@
 // 	// SandpackFileExplorer,
 // } from '@codesandbox/sandpack-react';
 // import { amethyst, dracula, sandpackDark, nightOwl } from '@codesandbox/sandpack-themes';
-import { appBoilterPlateCode } from '../../boiler-plate-code/jsx/app';
+// import { appBoilterPlateCode } from '../../boiler-plate-code/jsx/app';
+// import { buttonTemplate } from '../../boiler-plate-code/jsx/button';
 // import { KEYS } from '../redux/store';
 // import { useDispatch, useSelector } from 'react-redux';
-import { buttonTemplate } from '../../boiler-plate-code/jsx/button';
 
 // function SandboxEditor() {
 //Constants
@@ -69,8 +69,11 @@ import { buttonTemplate } from '../../boiler-plate-code/jsx/button';
 // }
 
 // export default SandboxEditor;
+
 import { SandpackProvider, SandpackLayout, SandpackPreview } from '@codesandbox/sandpack-react';
 import { MonacoSandpackEditor } from './MonacoSandpackEditor';
+import { appBoilterPlateCode } from '../../boiler-plate-code/jsx/app';
+import { buttonTemplate } from '../../boiler-plate-code/jsx/button';
 
 export default function SandboxEditor() {
 	const FILES = {
@@ -80,15 +83,15 @@ export default function SandboxEditor() {
 		'Button.js': {
 			code: buttonTemplate,
 		},
-		'/package.json': {
-			code: JSON.stringify({
-				dependencies: {
-					react: 'latest',
-					'react-dom': 'latest',
-					'react-scripts': 'latest',
-				},
-			}),
-		},
+		// '/package.json': {
+		// 	code: JSON.stringify({
+		// 		dependencies: {
+		// 			react: 'latest',
+		// 			'react-dom': 'latest',
+		// 			'react-scripts': 'latest',
+		// 		},
+		// 	}),
+		// },
 	};
 	return (
 		<SandpackProvider

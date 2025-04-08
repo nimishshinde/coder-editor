@@ -1,10 +1,13 @@
 import Editor from '@monaco-editor/react';
 import { useActiveCode, SandpackStack, FileTabs, useSandpack } from '@codesandbox/sandpack-react';
 import { MONACO_OPTIONS } from '../../constants/monacoOptions';
+import { useEffect } from 'react';
 
 export function MonacoSandpackEditor() {
 	const { code, updateCode } = useActiveCode();
 	const { sandpack } = useSandpack();
+	const { setActiveFile } = sandpack;
+
 	return (
 		<>
 			<SandpackStack style={{ height: '100vh', margin: 0 }}>
