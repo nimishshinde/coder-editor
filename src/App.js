@@ -4,6 +4,8 @@ import { Toaster } from 'react-hot-toast';
 import { Home, EditorPage } from './Pages';
 import './styles/index.css';
 import './styles/app.css';
+import { MonacoEditor } from './components';
+import SandboxEditor from './components/SandboxEditor';
 function App() {
 	return (
 		<>
@@ -29,6 +31,18 @@ function App() {
 						path="/editor/:editorType/:roomId"
 						element={<EditorPage />}
 					/>
+					<Route
+						path="/editor"
+						element={<EditorPage />}>
+						<Route
+							path="javascript/:roomId"
+							element={<MonacoEditor />}
+						/>
+						<Route
+							path="frontend/:roomId"
+							element={<SandboxEditor />}
+						/>
+					</Route>
 				</Routes>
 			</BrowserRouter>
 		</>

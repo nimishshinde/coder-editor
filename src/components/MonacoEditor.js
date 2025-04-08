@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import ACTIONS from '../Actions';
 import { update } from '../Pages/slices/editorPageSlice';
 import { KEYS } from '../redux/store';
+import { useOutletContext } from 'react-router-dom';
 
-function MonacoEditor({ socketRef, roomId }) {
+function MonacoEditor() {
+	const { socketRef, roomId } = useOutletContext();
 	const dispatch = useDispatch();
 	const { codeSlice } = KEYS;
 	const code = useSelector((state) => {
@@ -50,12 +52,12 @@ function MonacoEditor({ socketRef, roomId }) {
 			fontSize={24}
 			options={{
 				selectOnLineNumbers: true,
-				fontSize: 16,
+				fontSize: 14,
 				fontFamily: 'jetbrains mono',
 				lineNumbers: 'on',
 				roundedSelection: true,
 				scrollBeyondLastLine: false,
-				lineHeight: 22,
+				lineHeight: 20,
 				autoClosingBrackets: 'always',
 				autoIndent: 'full',
 				snippetSuggestions: 'inline',
@@ -68,7 +70,7 @@ function MonacoEditor({ socketRef, roomId }) {
 				cursorStyle: 'underline',
 				folding: true,
 				foldingHighlight: true,
-				fontWeight: '300',
+				// fontWeight: '',
 				fontLigatures: true,
 				links: true,
 				tabFocusMode: true,

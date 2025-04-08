@@ -87,6 +87,7 @@ function Home() {
 								justifyContent={'center'}
 								padding={'8px'}>
 								<img
+									alt="Frontend logo"
 									src="/html1.jpg"
 									className="editorTypeLogo"
 								/>

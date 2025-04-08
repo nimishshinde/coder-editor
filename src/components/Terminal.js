@@ -28,7 +28,7 @@ function Terminal() {
 	};
 
 	useEffect(() => {
-		console.log('Hello from terminal', open);
+		console.log('Terminal Open Close: ', open);
 	}, [open]);
 
 	useEffect(() => {

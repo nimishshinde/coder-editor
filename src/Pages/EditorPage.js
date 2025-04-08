@@ -6,8 +6,10 @@ import { Logo, Cilent, Editor, Terminal, MonacoEditor } from '../components';
 import { initSocket } from '../socket/socket';
 import { useSelector, useDispatch } from 'react-redux';
 import { KEYS } from '../redux/store';
-import { setOpenTerminal, setExeId, setTerminalData } from '../Pages/slices/terminalSlice';
+import { setOpenTerminal, setTerminalData } from '../Pages/slices/terminalSlice';
 import { SUCCESS, ERROR } from './constants';
+import { Outlet } from 'react-router-dom';
+import { openCloseFile } from '../components/slices/sandboxSlice';
 
 function EditorPage() {
 	const { codeSlice, terminalSlice } = KEYS;
@@ -26,6 +28,9 @@ function EditorPage() {
 	});
 	const terminal = useSelector((state) => {
 		return state[terminalSlice];
+	});
+	const sandboxEditor = useSelector((state) => {
+		return state[KEYS.sandboxSlice];
 	});
 
 	const handleCopyBtn = async () => {
@@ -66,16 +71,21 @@ function EditorPage() {
 
 		dispatch(setOpenTerminal(true));
 		workerRef.current.terminate();
+
+		//To avoid alerting the user of code taking too long to run, in destroyWorkerFn
+		workerRef.current = null;
 	};
 
 	/**
-	 * This function is written to distory the worker if the worker takes more than 2 secs
-	 * to give back the result, assuming the worker is blocked into infinte loop
+	 * @returns {void}
+	 * @description This function is written to destroy the worker if the worker takes more than 2 secs
+	 * to give back the result, assuming the worker is blocked into infinite loop
 	 */
-	function distoryWorkerFn() {
+	function destroyWorkerFn() {
 		setTimeout(() => {
 			if (workerRef.current) {
-				// workerRef.current?.terminate();
+				alert('Taking too long to run, please check your code and try again');
+				workerRef.current?.terminate();
 			}
 		}, 2000);
 	}
@@ -85,21 +95,24 @@ function EditorPage() {
 			if (!window.Worker) {
 				alert(
 					'Your browser doesnt support certain features to run code,' +
-						'Please try some other browser such as Chrome or update your browser'
+						'Please try some other browser such as Chrome, Edge, Firefox, etc.'
 				);
 				return '';
 			}
 
 			workerRef.current = new Worker(new URL('../workers/worker.js', import.meta.url));
 			workerRef.current.postMessage(code);
-
 			workerRef.current.onmessage = onMessageReceived;
-
-			distoryWorkerFn();
+			destroyWorkerFn();
 		} catch (error) {
-			console.error('Error occurend while running the code', error);
-			alert('Error occurend while running the code, Please reload the window and try again');
+			console.error('Error occurred while running the code', error);
+			alert('Error occurred while running the code, Please reload the window and try again');
 		}
+	};
+
+	const handleOpenFile = () => {
+		console.log('open/close file', sandboxEditor.openFile);
+		dispatch(openCloseFile(!sandboxEditor.openFile));
 	};
 
 	useEffect(() => {
@@ -169,7 +182,11 @@ function EditorPage() {
 						))}
 					</div>
 				</div>
-
+				<button
+					className="btn copyBtn"
+					onClick={handleOpenFile}>
+					open prev file
+				</button>
 				<button
 					className="btn copyBtn"
 					onClick={handleCopyBtn}>
@@ -192,9 +209,15 @@ function EditorPage() {
 					socketRef={socketRef}
 					roomId={roomId}
 				/> */}
-				<MonacoEditor
+				{/* <MonacoEditor
 					socketRef={socketRef}
 					roomId={roomId}
+				/> */}
+				<Outlet
+					context={{
+						socketRef,
+						roomId,
+					}}
 				/>
 				<Terminal />
 			</div>

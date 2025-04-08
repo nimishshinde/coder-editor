@@ -1,5 +1,8 @@
+import { log } from '../utils/consoleUtils.js';
+
 onmessage = (event) => {
 	console.log('Worker triggered');
+	// log();
 	const { code } = event.data;
 	function onErrorFn(error) {
 		postMessage({ error });
@@ -10,16 +13,40 @@ onmessage = (event) => {
 		const consoleOutput = [];
 
 		/**
-		 * To Do's
+		 * TODO:
 		 * 1. Over write more console methods
 		 * 2. Separate customConsole logic from this file and maintane a special file for this.
 		 */
 		const customConsole = {
+			// Overwrite console methods
+			// ...console,
 			log: (...args) => {
-				const test = args.join(' ');
-				const consoleStr = JSON.stringify(test);
-				consoleOutput.push(consoleStr);
+				const resultArr = args.map((arg) => {
+					try {
+						return typeof arg === 'object'
+							? JSON.stringify(
+									arg,
+									(key, val) => {
+										if (typeof val === 'function') {
+											return val.toString();
+										}
+										return val;
+									},
+									2
+								)
+							: String(arg);
+					} catch (e) {
+						return '[Circular]';
+					}
+				});
+				consoleOutput.push(resultArr.join(' '));
 			},
+
+			// FIXME:
+			// log: (...args) => {
+			// 	const resultArr = log(args);
+			// 	consoleOutput.push(resultArr.join(''));
+			// },
 		};
 
 		/**
